@@ -1,0 +1,14 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome, Admin!</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="{{ url_for('admin.locations') }}" class="text-decoration-none">
+                <i class="fas fa-map-marker-alt"></i> Manage Locations
+            </a>
+        </li>
+        <!-- Add links to supervisors, employees, attendance later -->
+    </ul>
+</div>
+{% endblock %}

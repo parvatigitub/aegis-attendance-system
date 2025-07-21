@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Supervisor Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 220px;
+            background-color: #2d2d2d;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar a {
+            color: white;
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #444;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    {% if current_user.is_authenticated and current_user.role == 'supervisor' %}
+    <div class="sidebar">
+        <h5 class="text-center">Supervisor</h5>
+        <a href="{{ url_for('supervisor.dashboard') }}"><i class="bi bi-house-door"></i> Dashboard</a>
+        <a href="{{ url_for('supervisor.add_employee') }}"><i class="bi bi-plus"></i> Add Employee</a>
+        <a href="{{ url_for('supervisor.employee_list') }}"><i class="bi bi-list"></i> Employee List</a>
+        <a href="{{ url_for('supervisor.mark_attendance') }}"><i class="bi bi-clock"></i> Mark Attendance</a>
+        <a href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </div>
+    {% endif %}
+
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

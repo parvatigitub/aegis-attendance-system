@@ -1,0 +1,68 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Employee</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="row">
+            {% for field in form if field.type != 'CSRFToken' and field.name not in ['submit'] %}
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        {{ field.label(class="form-label") }}
+                    {% if field.name == 'supervisor_id' %}
+                        {{ field(class="form-select") }}
+                    {% elif field.name == 'role' %}
+                        <input type="text" class="form-control" value="{{ employee.role if employee.role else 'employee' }}" readonly>
+                    {% else %}
+                        {{ field(class="form-control") }}
+                    {% endif %}
+                    {% if field.errors %}
+                        <small class="text-danger">{{ field.errors[0] }}</small>
+                    {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <label>Aadhaar Image:</label><br>
+                {% if employee.aadhaar_image %}
+                    <img src="{{ url_for('static', filename=employee.aadhaar_image) }}" alt="Aadhaar" class="img-thumbnail" height="100">
+                {% else %}
+                    <p class="text-muted">No image uploaded</p>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <label>PAN Image:</label><br>
+                {% if employee.pan_image %}
+                    <img src="{{ url_for('static', filename=employee.pan_image) }}" alt="PAN" class="img-thumbnail" height="100">
+                {% else %}
+                    <p class="text-muted">No image uploaded</p>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <label>Passbook Image:</label><br>
+                {% if employee.passbook_image %}
+                    <img src="{{ url_for('static', filename=employee.passbook_image) }}" alt="Passbook" class="img-thumbnail" height="100">
+                {% else %}
+                    <p class="text-muted">No image uploaded</p>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <label>Profile Image:</label><br>
+                {% if employee.profile_image %}
+                    <img src="{{ url_for('static', filename=employee.profile_image) }}" alt="Profile" class="img-thumbnail" height="100">
+                {% else %}
+                    <p class="text-muted">No image uploaded</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

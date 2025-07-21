@@ -1,0 +1,199 @@
+{% extends 'supervisor/layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Edit Employee: {{ employee.first_name }} {{ employee.last_name }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.first_name.label(class="form-label") }}
+                            {{ form.first_name(class="form-control") }}
+                            {% if form.first_name.errors %}
+                                {% for error in form.first_name.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.middle_name.label(class="form-label") }}
+                            {{ form.middle_name(class="form-control") }}
+                            {% if form.middle_name.errors %}
+                                {% for error in form.middle_name.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.last_name.label(class="form-label") }}
+                            {{ form.last_name(class="form-control") }}
+                            {% if form.last_name.errors %}
+                                {% for error in form.last_name.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.dob.label(class="form-label") }}
+                            {{ form.dob(class="form-control") }}
+                            {% if form.dob.errors %}
+                                {% for error in form.dob.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.doj.label(class="form-label") }}
+                            {{ form.doj(class="form-control") }}
+                            {% if form.doj.errors %}
+                                {% for error in form.doj.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.phone.label(class="form-label") }}
+                            {{ form.phone(class="form-control") }}
+                            {% if form.phone.errors %}
+                                {% for error in form.phone.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.employee_code.label(class="form-label") }}
+                            {{ form.employee_code(class="form-control") }}
+                            {% if form.employee_code.errors %}
+                                {% for error in form.employee_code.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.designation.label(class="form-label") }}
+                            {{ form.designation(class="form-control") }}
+                            {% if form.designation.errors %}
+                                {% for error in form.designation.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.aadhaar_no.label(class="form-label") }}
+                            {{ form.aadhaar_no(class="form-control") }}
+                            {% if form.aadhaar_no.errors %}
+                                {% for error in form.aadhaar_no.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.pan_no.label(class="form-label") }}
+                            {{ form.pan_no(class="form-control") }}
+                            {% if form.pan_no.errors %}
+                                {% for error in form.pan_no.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.account_number.label(class="form-label") }}
+                            {{ form.account_number(class="form-control") }}
+                            {% if form.account_number.errors %}
+                                {% for error in form.account_number.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.ifsc.label(class="form-label") }}
+                            {{ form.ifsc(class="form-control") }}
+                            {% if form.ifsc.errors %}
+                                {% for error in form.ifsc.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.bank_name.label(class="form-label") }}
+                            {{ form.bank_name(class="form-control") }}
+                            {% if form.bank_name.errors %}
+                                {% for error in form.bank_name.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.current_address.label(class="form-label") }}
+                            {{ form.current_address(class="form-control") }}
+                            {% if form.current_address.errors %}
+                                {% for error in form.current_address.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.permanent_address.label(class="form-label") }}
+                            {{ form.permanent_address(class="form-control") }}
+                            {% if form.permanent_address.errors %}
+                                {% for error in form.permanent_address.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.aadhaar_image.label(class="form-label") }}
+                            {{ form.aadhaar_image(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.pan_image.label(class="form-label") }}
+                            {{ form.pan_image(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.passbook_image.label(class="form-label") }}
+                            {{ form.passbook_image(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.profile_image.label(class="form-label") }}
+                            {{ form.profile_image(class="form-control") }}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('supervisor.employee_list') }}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

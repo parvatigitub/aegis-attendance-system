@@ -1,0 +1,157 @@
+{% extends 'supervisor/layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Mark Attendance</h2>
+            <div class="mt-2">
+                <a href="{{ url_for('supervisor.mark_attendance', week_offset=week_offset-1) }}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Previous Week
+                </a>
+                <span class="mx-2">
+                    <span class="badge bg-primary">{{ location_name }}</span>
+                    <span class="badge bg-info text-dark">{{ month_name }} {{ target_date.year }}</span>
+                </span>
+                <a href="{{ url_for('supervisor.mark_attendance', week_offset=week_offset+1) }}" class="btn btn-outline-secondary btn-sm">
+                    Next Week <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="text-end">
+            <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle"></i> Only today's attendance can be modified
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3"><strong>Location:</strong> {{ location_name }}</div>
+                <div class="col-md-3"><strong>Month:</strong> {{ month_name }}</div>
+                <div class="col-md-3"><strong>Week:</strong> {{ week_no }} Week</div>
+                <div class="col-md-3"><strong>Supervisor:</strong> {{ supervisor_name }}</div>
+            </div>
+        </div>
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Employee</th>
+                        {% for date in week_dates %}
+                            <th class="text-center">
+                                <div>{{ date.strftime('%a') }}</div>
+                                <div>{{ date.strftime('%d %b') }}</div>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp in employees %}
+                        <tr>
+                            <td>
+                                {{ emp.first_name }} {{ emp.last_name }}
+                                <small class="text-muted d-block">{{ emp.employee_code }}</small>
+                            </td>
+                            {% for date in week_dates %}
+                                {% set emp_attendance = attendance_data.get(emp.id, {}) %}
+                                {% set date_attendance = emp_attendance.get(date|string, {}) %}
+                                {% set is_present = date_attendance.get('status', 'Absent') == 'Present' %}
+                                <td class="text-center">
+                                    <input type="hidden" name="attendance_{{ emp.id }}_{{ date }}" value="off">
+                                    <button type="button" class="btn btn-sm {% if is_present %}btn-success" disabled>Present{% else %}btn-outline-secondary mark-btn" data-emp-id="{{ emp.id }}" data-date="{{ date }}">Mark{% endif %}</button>
+                                    <input type="checkbox" id="attendance_{{ emp.id }}_{{ date }}" name="attendance_{{ emp.id }}_{{ date }}" class="d-none" {% if is_present %}checked{% endif %}>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">OT:</span>
+                                        <input type="number" class="form-control" 
+                                               name="overtime_{{ emp.id }}_{{ date }}" 
+                                               value="{{ '%.2f'|format(date_attendance.get('overtime_hours') or 0) }}" 
+                                               min="0" step="0.5" style="max-width: 70px;">
+                                        <span class="input-group-text">hrs</span>
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-3">
+            <a href="{{ url_for('supervisor.employee_list') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Save Attendance
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle mark button clicks
+    document.querySelectorAll('.mark-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const empId = this.dataset.empId;
+            const date = this.dataset.date;
+            const checkbox = document.getElementById(`attendance_${empId}_${date}`);
+            
+            // Toggle the hidden checkbox
+            checkbox.checked = !checkbox.checked;
+            
+            // Update button appearance
+            if (checkbox.checked) {
+                this.classList.remove('btn-outline-secondary');
+                this.classList.add('btn-success');
+                this.textContent = 'Present';
+                this.disabled = true;
+            } else {
+                this.classList.remove('btn-success');
+                this.classList.add('btn-outline-secondary');
+                this.textContent = 'Mark';
+            }
+            
+            // Also update the corresponding overtime field's disabled state
+            const otInput = this.closest('td').querySelector('input[type="number"]');
+            if (otInput) {
+                otInput.disabled = !checkbox.checked;
+                if (!checkbox.checked) {
+                    otInput.value = '0';
+                }
+            }
+        });
+    });
+    
+    // Initialize the state of the buttons and OT fields
+    document.querySelectorAll('input[type="checkbox"][name^="attendance_"]').forEach(checkbox => {
+        const button = checkbox.closest('td').querySelector('.mark-btn');
+        const otInput = checkbox.closest('td').querySelector('input[type="number"]');
+        
+        if (checkbox.checked) {
+            button.classList.remove('btn-outline-secondary');
+            button.classList.add('btn-success');
+            button.textContent = 'Present';
+            button.disabled = true;
+            if (otInput) otInput.disabled = false;
+        } else if (otInput) {
+            otInput.disabled = true;
+        }
+    });
+});
+</script>
+
+<style>
+    .form-select-sm {
+        min-width: 100px;
+    }
+    th {
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
