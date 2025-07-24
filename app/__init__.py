@@ -5,37 +5,31 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from config import Config
 
-db = SQLAlchemy()
-login_manager = LoginManager()
-csrf = CSRFProtect()
-migrate = Migrate()
+app = Flask(__name__)
+app.config.from_object(Config)
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
-    app.config.from_object(config_class)
-    
-    @app.after_request
-    def add_header(response):
-        # Prevent all caching for authenticated pages
-        if 'Cache-Control' not in response.headers:
-            response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
-            response.headers['Pragma'] = 'no-cache'
-            response.headers['Expires'] = '-1'
-        return response
+# Extensions
+db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+csrf = CSRFProtect(app)
+migrate = Migrate(app, db)
 
-    db.init_app(app)
-    login_manager.init_app(app)
-    csrf.init_app(app)
-    migrate.init_app(app, db)
+login_manager.login_view = 'auth.login'
 
-    login_manager.login_view = 'auth.login'
+# 💡 Cache-control
+@app.after_request
+def add_header(response):
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+    return response
 
-    # Import and register Blueprints
-    from app.routes.auth import auth_bp
-    from app.routes.admin import admin_bp
-    from app.routes.supervisor import supervisor_bp
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
+# ✅ Blueprints import and register after app creation
+from app.routes.auth import auth_bp
+from app.routes.admin import admin_bp
+from app.routes.supervisor import supervisor_bp
 
-    return app
+app.register_blueprint(auth_bp)
+app.register_blueprint(admin_bp, url_prefix='/admin')
+app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
