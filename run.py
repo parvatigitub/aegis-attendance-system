@@ -1,5 +1,7 @@
 from app import app
-
+from flask_migrate import upgrade
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    with app.app_context():   # ✅ Ye line application context activate karega
+        upgrade()             # ✅ Ye migration apply karega
+    app.run()
