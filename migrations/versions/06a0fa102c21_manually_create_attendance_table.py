@@ -17,8 +17,18 @@ depends_on = None
 
 
 def upgrade():
-    pass
+    op.create_table(
+        'attendance',
+        sa.Column('id', sa.Integer(), primary_key=True),
+        sa.Column('employee_id', sa.Integer(), nullable=False),
+        sa.Column('date', sa.Date(), nullable=False),
+        sa.Column('status', sa.String(length=10), nullable=False),
+        sa.Column('overtime_hours', sa.Float(), nullable=True),
+        sa.Column('marked_by', sa.String(length=50), nullable=False),
+        sa.Column('timestamp', sa.DateTime(), nullable=False),
+    )
+
 
 
 def downgrade():
-    pass
+    op.drop_table('attendance')
