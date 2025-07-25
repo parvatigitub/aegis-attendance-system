@@ -34,6 +34,5 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
 
-from create_admin import create_admin_bp
-
+from app.create_admin import create_admin_bp
 app.register_blueprint(create_admin_bp)      
