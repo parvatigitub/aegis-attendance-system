@@ -33,3 +33,6 @@ from app.routes.supervisor import supervisor_bp
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
+
+from app.routes.create_admin import create_admin_bp  # ✅ Line 1
+app.register_blueprint(create_admin_bp)      
