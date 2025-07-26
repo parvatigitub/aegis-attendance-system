@@ -40,8 +40,8 @@ with app.app_context():
     from werkzeug.security import generate_password_hash
 
     try:
-        admin = User.query.filter_by(username='admin').first()
-        if not admin:
+        existing_admin = User.query.filter_by(username='admin').first()
+        if not existing_admin:
             admin = User(
                 username='admin',
                 name='Admin User',
