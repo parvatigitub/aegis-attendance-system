@@ -34,4 +34,24 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
 
-     
+# ✅ One-time admin creation
+with app.app_context():
+    from app.models import User
+    from werkzeug.security import generate_password_hash
+
+    try:
+        admin = User.query.filter_by(username='admin').first()
+        if not admin:
+            admin = User(
+                username='admin',
+                name='Admin User',
+                role='admin',
+                password_hash=generate_password_hash('admin123')
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print("✅ Admin user created successfully.")
+        else:
+            print("ℹ️ Admin user already exists.")
+    except Exception as e:
+        print(f"❌ Error creating admin user: {e}")
