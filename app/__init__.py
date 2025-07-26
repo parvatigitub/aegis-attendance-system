@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from config import Config
-from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -35,22 +34,4 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
 
-# ✅ Auto-create admin at first request
-from app.models import User  # Make sure User is correctly imported
-
-@app.before_first_request
-def auto_create_admin():
-    existing_admin = User.query.filter_by(username="admin").first()
-    if not existing_admin:
-        admin = User(
-            username="admin",
-            name="Admin User",
-            role="admin",
-            password_hash=generate_password_hash("admin123")
-        )
-        db.session.add(admin)
-        db.session.commit()
-        print("✅ Admin user created: admin / admin123")
-    else:
-        print("ℹ️ Admin already exists")
-
+     
