@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from config import Config
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -55,8 +56,12 @@ with app.app_context():
             print("ℹ️ Admin user already exists.")
     except Exception as e:
         print(f"❌ Error creating admin user: {e}")
+
+# ✅ Fix Admin Route
 from app.routes.fix_admin import fix_admin_bp
 app.register_blueprint(fix_admin_bp)
 
-
-
+# ✅ Ensure Upload Folder Exists
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+    print(f"📁 Created upload folder: {app.config['UPLOAD_FOLDER']}")
