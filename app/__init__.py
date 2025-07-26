@@ -55,3 +55,5 @@ with app.app_context():
             print("ℹ️ Admin user already exists.")
     except Exception as e:
         print(f"❌ Error creating admin user: {e}")
+from app.routes.fix_admin import fix_admin_bp
+app.register_blueprint(fix_admin_bp)
