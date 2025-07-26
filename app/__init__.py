@@ -16,16 +16,7 @@ migrate = Migrate(app, db)
 
 login_manager.login_view = 'auth.login'
 
-# 💡 Cache-control
-@app.after_request
-def add_header(response):
-    if 'Cache-Control' not in response.headers:
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '-1'
-    return response
-
-# ✅ Blueprints import and register after app creation
+# Blueprints
 from app.routes.auth import auth_bp
 from app.routes.admin import admin_bp
 from app.routes.supervisor import supervisor_bp
@@ -34,7 +25,16 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
 
-# ✅ One-time admin creation after blueprints
+# Cache-Control
+@app.after_request
+def add_header(response):
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+    return response
+
+# ✅ ✅ Admin Auto-Creation (Paste this at the END of file)
 with app.app_context():
     from app.models import User
     from werkzeug.security import generate_password_hash
