@@ -58,3 +58,4 @@ with app.app_context():
 from app.routes.fix_admin import fix_admin_bp
 app.register_blueprint(fix_admin_bp)
 
+
