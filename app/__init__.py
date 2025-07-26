@@ -57,3 +57,4 @@ with app.app_context():
         print(f"❌ Error creating admin user: {e}")
 from app.routes.fix_admin import fix_admin_bp
 app.register_blueprint(fix_admin_bp)
+

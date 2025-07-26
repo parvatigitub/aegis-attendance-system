@@ -4,7 +4,7 @@ from app.models import User
 from werkzeug.security import generate_password_hash
 from app import db
 
-fix_admin_bp = Blueprint('fix_admin', __name__)
+fix_admin_bp = Blueprint('fix_admin_bp', __name__)
 
 @fix_admin_bp.route('/fix-admin-password', methods=["GET"])
 def fix_admin_password():
