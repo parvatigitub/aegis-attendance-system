@@ -34,7 +34,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(supervisor_bp, url_prefix='/supervisor')
 
-# ✅ One-time admin creation
+# ✅ One-time admin creation after blueprints
 with app.app_context():
     from app.models import User
     from werkzeug.security import generate_password_hash
