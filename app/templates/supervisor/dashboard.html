@@ -49,11 +49,7 @@
                             {% for emp in employees %}
                             <tr>
                                 <td>
-                                    {% if emp.profile_image %}
-                                        <img src="{{ url_for('static', filename=emp.profile_image) }}" alt="Profile" width="60" height="60">
-                                    {% else %}
-                                        <img src="{{ url_for('static', filename='images/default.png') }}" alt="No Image" width="60" height="60">
-                                    {% endif %}
+                                    <img src="{{ url_for('static', filename=emp.profile_image) }}" alt="Profile" width="60" height="60">
                                 </td>
                                 <td>{{ emp.first_name }} {{ emp.middle_name }} {{ emp.last_name }}</td>
                                 <td>{{ emp.designation }}</td>
